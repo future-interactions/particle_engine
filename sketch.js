@@ -15,7 +15,7 @@ let yCount = 20;
 let count = 0;
 let sinCount = 0;
 let alignSlider, separationSlider, cohesionSlider;
-let playCheck, flockingCheck, gravityCheck, windCheck, patternCheck, repelCheck;
+let playCheck, flockingCheck, gravityCheck, windCheck, patternCheck, repelCheck, expandCheck, contractCheck;
 let radius = 200;
 //experimental listnames for logo coordinates
 let logoXList, logoYList;
@@ -27,13 +27,15 @@ function preload() {
   DMSans = loadFont('assets/DMSans-Medium.ttf');
   suisseMono = loadFont('assets/SuisseIntlMono-Regular.otf');
   //experimental load logo coordinates
-  logoXList = loadStrings('assets/logoLocList_x_11.txt');
-  logoYList = loadStrings('assets/logoLocList_y_11.txt');
+  logoXList = loadStrings('assets/logoLocList_vaisala_offset-2_5_x.txt');
+  logoYList = loadStrings('assets/logoLocList_vaisala_offset-2_5_y.txt');
+  // logoXList = loadStrings('assets/logoLocList_vaisala_bits_offset-5_10_x.txt');
+  // logoYList = loadStrings('assets/logoLocList_vaisala_bits_offset-5_10_y.txt');
 }
 
 function setup() {
   //pres
-  createCanvas(1920, 1080, WEBGL);
+  createCanvas(1920 * 2, 1080 * 2, WEBGL);
   //event
   // createCanvas(1462, 428, WEBGL);
 
@@ -42,9 +44,9 @@ function setup() {
 
   //pres
   let xListSorted = logoXList.toSorted();
-  logoX = xListSorted[logoXList.length-1];
+  logoX = xListSorted[logoXList.length - 1];
   //pres
-  cubeDims = createVector(1920 * 0.75, 1080 * 0.75, 1080 * 0.25);
+  cubeDims = createVector(1920 * 2, 1080 * 2, 1080 * 2.125);
 
   //event
   // cubeDims = createVector(1462, 428, 200);
@@ -59,10 +61,10 @@ function setup() {
   // experimental draw logo
   for (let i = 0; i < logoXList.length; i++) {
     let currPos = createVector(logoXList[i], logoYList[i], 0);
-    let swapPos = createVector(logoXList[logoXList.length-i-1], logoYList[logoYList.length-i-1], 0);  
+    let swapPos = createVector(logoXList[logoXList.length - i - 1], logoYList[logoYList.length - i - 1], 0);
     //logo variable
-    flock[i] = new Particle(currPos.x-496, currPos.y-150 , currPos.z, random(radius*0.01, radius*0.1), swapPos.x-496,swapPos.y-150);
-}
+    flock[i] = new Particle(currPos.x - width * 0.25, currPos.y - height * 0.25, currPos.z, random(30,30), swapPos.x - width * 0.25, swapPos.y - height * 0.25);
+  }
 
   // }
   // for (let i = 0; i < 1; i++) {
@@ -101,12 +103,27 @@ function draw() {
     if (repelCheck.checked()) {
       particles.applyRepel(flock);
     }
+
+    if (expandCheck.checked()) {
+      particles.applyExpand(flock);
+    }else if (contractCheck.checked()){
+      particles.applyContract(flock);
+    }else{
+      particles.applyBacktoNormal(flock);
+    }
+
+    // if (contractCheck.checked()) {
+    //   particles.applyContract(flock);
+    // }else {
+    //   particles.applyBacktoNormal(flock);
+    // }
+   
     particles.show();
     particles.checkCollision();
     // particles.applyAttraction();
   }
   if (saveCalled && count < 1500) {
-    frameRate(5);
+    //frameRate(5);
     saveCanvas('test-output' + count, 'png');
     count++;
   }

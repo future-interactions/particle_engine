@@ -42,6 +42,12 @@ function drawUI() {
   repelCheck = createCheckbox('', false);
   repelCheck.position(14, 255);
 
+  expandCheck = createCheckbox('', false);
+  expandCheck.position(14, 275);
+
+  contractCheck = createCheckbox('', false);
+  contractCheck.position(14, 295);
+
   let playCheckText = createElement('desc', 'Play');
   playCheckText.style('color', '#ffffff');
   playCheckText.position(36, 157);
@@ -66,4 +72,12 @@ function drawUI() {
   repelCheckText.style('color', '#ffffff');
   repelCheckText.position(36, 257);
 
+
+  let expandCheckText = createElement('desc', 'Expand');
+  expandCheckText.style('color', '#ffffff');
+  expandCheckText.position(36, 277);
+
+  let contractCheckText = createElement('desc', 'Contract');
+  contractCheckText.style('color', '#ffffff');
+  contractCheckText.position(36, 297);
 }

@@ -1,7 +1,7 @@
 class Particle {
     constructor(x, y, z, d, a_x, a_y) {
         this.location = createVector(x, y, z);
-        this.startLoc = createVector(x*0.5, y*0.5, z);
+        this.startLoc = createVector(a_x, a_y, z);
         // this.startLoc = createVector(x * 0.5, y * 0.5, z);
         // this.startLoc = p5.Vector.mult();
 
@@ -11,16 +11,18 @@ class Particle {
         // print("-----------");
 
 
-        this.repelLoc = createVector(-cubeDims.x/2+300, -cubeDims.y/2+50, -100);
+        this.repelLoc = createVector(-cubeDims.x / 2 + 300, -cubeDims.y / 2 + 50, -100);
         this.velocity = p5.Vector.random3D();
         this.acceleration = p5.Vector.random3D();
         this.dims = createVector(d, d, d);
         // print(d);
         this.r = sqrt(d);
+        this.targetR = this.r;
         this.mass = createVector(d, d, d);
         //  this.mass.mult(5);
-        this.maxSpeed = 8;//logo bounce
-        this.maxForce = 0.3; //logo bouce
+        this.maxSpeed = 15;//logo bounce for intro
+        this.maxForce = 1.3; //logo bouce for intro
+
         //  this.maxSpeed = 3; //standard good settings
         // this.maxForce = 1; //standard good settings
         this.color = color(255);
@@ -82,7 +84,7 @@ class Particle {
     separation(particles) {
 
         let steering = createVector();
-        let perceptionRadius = 50;
+        let perceptionRadius = 100;
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -126,7 +128,7 @@ class Particle {
         this.repelLoc = createVector(mouseX - (width / 2), mouseY - (height / 2), 0);
         // print("replc = " + this.repelLoc)
         let steering = p5.Vector.sub(this.repelLoc, this.location);
-        let slowRadius =50;
+        let slowRadius =450;
         let distance = steering.mag();
         if (distance < slowRadius) {
             let speed = map(distance, 0, slowRadius, 0, this.maxSpeed);
@@ -139,6 +141,12 @@ class Particle {
         }
 
     }
+
+    // expand(particles) {
+    //     let expandVal = this.r * 2;
+    //     return (expandVal);
+    // }
+
 
     flock(particles) {
 
@@ -182,6 +190,23 @@ class Particle {
         let rep = this.repel(particles);
         this.applyForce(rep);
     }
+    applyExpand(particles) {
+        this.r += 0.1;
+    }
+    applyBacktoNormal(particles) {
+        if (this.r > this.targetR) {
+            this.r -= 0.1;
+        } else if (this.r < this.targetR) {
+            this.r+=0.1;
+        }
+    }
+
+    applyContract(particles) {
+        if (this.r > 0) {
+            this.r -= 0.1;
+        }
+    }
+
 
     wind(particles) {
         let emitter = createVector(-cubeDims.x / 2 + 100, this.location.y, 0);
@@ -207,8 +232,8 @@ class Particle {
         // let sinOffset = sin(sinCount) * (random(-0.2, 0.2));
         let sinOffset = map(noise(sinCount), 0.48, 0.52, 0, 1);
         // let sinOffsetEq = 
-        let sinOffsetMult = sinOffset * 0.001;
-        let gravity = createVector(sinOffsetMult, -0.01, 0);
+        let sinOffsetMult = sinOffset * 0.0005;
+        let gravity = createVector(sinOffsetMult, -0.001, 0);
         let weight = p5.Vector.mult(gravity, this.mass);
         sinCount += 0.1;
         return (weight);
@@ -293,29 +318,29 @@ class Particle {
         // }
         //tunnel
 
-        if (this.location.x >= cubeDims.x / 2 - (this.dims.x / 4)) {
-            this.location.x = -cubeDims.x / 2 + (this.dims.x / 4);
-        } else if (this.location.x <= -cubeDims.x / 2 + (this.dims.x / 4)) {
-            this.location.x = cubeDims.x / 2 - (this.dims.x / 4);
+        if (this.location.x >= cubeDims.x / 2 ) {
+            this.location.x = -cubeDims.x / 2 ;
+        } else if (this.location.x <= -cubeDims.x / 2 ) {
+            this.location.x = cubeDims.x / 2;
         }
-        if (this.location.y >= cubeDims.y / 2 - (this.dims.y / 4)) {
+        if (this.location.y >= cubeDims.y / 2 ) {
             //opens base
-            this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
+            this.location.y = -cubeDims.y / 2 ;
             //closes base
             // this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
             // this.velocity.y = this.velocity.y * -1;
-        } else if (this.location.y <= -cubeDims.y / 2 + (this.dims.y / 4)) {
+        } else if (this.location.y <= -cubeDims.y / 2 ) {
             //gas up opens top
-            this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
+            this.location.y = cubeDims.y / 2;
             //closes lid
             // this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
             // this.velocity.y = this.velocity.y * -1;
         }
-        if (this.location.z >= cubeDims.z / 2 - (this.dims.z / 4)) {
-            this.location.z = cubeDims.z / 2 - (this.dims.z / 4);
+        if (this.location.z >= cubeDims.z / 2 ) {
+            this.location.z = cubeDims.z / 2 ;
             this.velocity.z = this.velocity.z * -1;
-        } else if (this.location.z <= -cubeDims.z / 2 + (this.dims.z / 4)) {
-            this.location.z = -cubeDims.z / 2 + (this.dims.z / 4);
+        } else if (this.location.z <= -cubeDims.z / 2 ) {
+            this.location.z = -cubeDims.z / 2 ;
             this.velocity.z = this.velocity.z * -1;
         }
     }
