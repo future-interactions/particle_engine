@@ -2,6 +2,8 @@ class Particle {
     constructor(x, y, z, d, a_x, a_y) {
         this.location = createVector(x, y, z);
         this.startLoc = createVector(a_x, a_y, z);
+        this.globeLoc = createVector(a_x * 0.5, a_y, z);
+
         // this.startLoc = createVector(x * 0.5, y * 0.5, z);
         // this.startLoc = p5.Vector.mult();
 
@@ -11,7 +13,9 @@ class Particle {
         // print("-----------");
 
 
-        this.repelLoc = createVector(-cubeDims.x / 2 + 300, -cubeDims.y / 2 + 50, -100);
+       // this.repelLoc = createVector(-cubeDims.x / 2 + 300, -cubeDims.y / 2 + 50, -100);
+    //    this.repelLoc = createVector(-cubeDims.x*0.25,-cubeDims.y*0.1,cubeDims.z*0.5);
+    this.repelLoc = createVector(0,0,cubeDims.z*0.5);
         this.velocity = p5.Vector.random3D();
         this.acceleration = p5.Vector.random3D();
         this.dims = createVector(d, d, d);
@@ -20,11 +24,11 @@ class Particle {
         this.targetR = this.r;
         this.mass = createVector(d, d, d);
         //  this.mass.mult(5);
-        this.maxSpeed = 15;//logo bounce for intro
-        this.maxForce = 1.3; //logo bouce for intro
+        // this.maxSpeed = 15;//logo bounce for intro
+        // this.maxForce = 1.3; //logo bouce for intro
 
-        //  this.maxSpeed = 3; //standard good settings
-        // this.maxForce = 1; //standard good settings
+         this.maxSpeed = 3; //standard good settings
+        this.maxForce = 0.1; //standard good settings
         this.color = color(255);
         //
     }
@@ -37,7 +41,7 @@ class Particle {
     align(particles) {
 
         let steering = createVector();
-        let perceptionRadius = 150;
+        let perceptionRadius = 100;
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -60,7 +64,7 @@ class Particle {
     cohesion(particles) {
 
         let steering = createVector();
-        let perceptionRadius = 100;
+        let perceptionRadius =200;
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -84,7 +88,7 @@ class Particle {
     separation(particles) {
 
         let steering = createVector();
-        let perceptionRadius = 100;
+        let perceptionRadius = 50;
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -107,7 +111,25 @@ class Particle {
     }
     returnToStart(particles) {
         //   let startPositions = this.startLoc;
-        let steering = p5.Vector.sub(this.startLoc, this.location);
+        let xScale = p5.Vector.mult(this.startLoc, patternScaler);
+     //   this.startLoc = createVector(xScale, this.startLoc.y, this.startLoc.z);
+        let steering = p5.Vector.sub(xScale, this.location);
+        let slowRadius = 25;
+        let distance = steering.mag();
+        if (distance < slowRadius) {
+            let speed = map(distance, 0, slowRadius, 0, this.maxSpeed);
+            steering.setMag(speed);
+        } else {
+            steering.setMag(this.maxSpeed);
+        }
+        // steering.setMag(this.maxSpeed);
+        steering.sub(this.velocity);
+        steering.limit(this.maxForce);
+        return (steering);
+    }
+    halfWidth(particles) {
+        //   let startPositions = this.startLoc;
+        let steering = p5.Vector.sub(this.globeLoc, this.location);
         let slowRadius = 25;
         let distance = steering.mag();
         if (distance < slowRadius) {
@@ -125,10 +147,10 @@ class Particle {
 
     // repel
     repel(particles) {
-        this.repelLoc = createVector(mouseX - (width / 2), mouseY - (height / 2), 0);
+     //   this.repelLoc = createVector(mouseX - (width / 2), mouseY - (height / 2), 0);
         // print("replc = " + this.repelLoc)
         let steering = p5.Vector.sub(this.repelLoc, this.location);
-        let slowRadius =450;
+        let slowRadius = 700;
         let distance = steering.mag();
         if (distance < slowRadius) {
             let speed = map(distance, 0, slowRadius, 0, this.maxSpeed);
@@ -185,6 +207,10 @@ class Particle {
         let ret = this.returnToStart(particles);
         this.applyForce(ret);
     }
+    applyHalfWidth(particles) {
+        let hw = this.halfWidth(particles);
+        this.applyForce(hw);
+    }
 
     applyRepel(particles) {
         let rep = this.repel(particles);
@@ -197,7 +223,7 @@ class Particle {
         if (this.r > this.targetR) {
             this.r -= 0.1;
         } else if (this.r < this.targetR) {
-            this.r+=0.1;
+            this.r += 0.1;
         }
     }
 
@@ -294,56 +320,56 @@ class Particle {
 
     checkCollision() {
         //bounce
-        //     if (this.location.x >= cubeDims.x / 2 - (this.dims.x / 4)) {
-        //         this.location.x = cubeDims.x / 2 - (this.dims.x / 4);
-        //         this.velocity.x = this.velocity.x * -1;
-        //     } else if (this.location.x <= -cubeDims.x / 2 + (this.dims.x / 4)) {
-        //         this.location.x = -cubeDims.x / 2 + (this.dims.x / 4);
-        //         this.velocity.x = this.velocity.x * -1;
-        //     }
-        //     if (this.location.y >= cubeDims.y / 2 - (this.dims.y / 4)) {
-        //         this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
-        //         this.velocity.y = this.velocity.y * -1;
-        //     } else if (this.location.y <= -cubeDims.y / 2 + (this.dims.y / 4)) {
-        //         this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
-        //         this.velocity.y = this.velocity.y * -1;
-        //     }
-        //     if (this.location.z >= cubeDims.z / 2 - (this.dims.z / 4)) {
-        //         this.location.z = cubeDims.z / 2 - (this.dims.z / 4);
-        //         this.velocity.z = this.velocity.z * -1;
-        //     } else if (this.location.z <= -cubeDims.z / 2 + (this.dims.z / 4)) {
-        //         this.location.z = -cubeDims.z / 2 + (this.dims.z / 4);
-        //         this.velocity.z = this.velocity.z * -1;
-        //     }
-        // }
+            if (this.location.x >= cubeDims.x / 2 - (this.dims.x / 4)) {
+                this.location.x = cubeDims.x / 2 - (this.dims.x / 4);
+                this.velocity.x = this.velocity.x * -1;
+            } else if (this.location.x <= -cubeDims.x / 2 + (this.dims.x / 4)) {
+                this.location.x = -cubeDims.x / 2 + (this.dims.x / 4);
+                this.velocity.x = this.velocity.x * -1;
+            }
+            if (this.location.y >= cubeDims.y / 2 - (this.dims.y / 4)) {
+                this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
+                this.velocity.y = this.velocity.y * -1;
+            } else if (this.location.y <= -cubeDims.y / 2 + (this.dims.y / 4)) {
+                this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
+                this.velocity.y = this.velocity.y * -1;
+            }
+            if (this.location.z >= cubeDims.z / 2 - (this.dims.z / 4)) {
+                this.location.z = cubeDims.z / 2 - (this.dims.z / 4);
+                this.velocity.z = this.velocity.z * -1;
+            } else if (this.location.z <= -cubeDims.z / 2 + (this.dims.z / 4)) {
+                this.location.z = -cubeDims.z / 2 + (this.dims.z / 4);
+                this.velocity.z = this.velocity.z * -1;
+            }
+        }
         //tunnel
 
-        if (this.location.x >= cubeDims.x / 2 ) {
-            this.location.x = -cubeDims.x / 2 ;
-        } else if (this.location.x <= -cubeDims.x / 2 ) {
-            this.location.x = cubeDims.x / 2;
-        }
-        if (this.location.y >= cubeDims.y / 2 ) {
-            //opens base
-            this.location.y = -cubeDims.y / 2 ;
-            //closes base
-            // this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
-            // this.velocity.y = this.velocity.y * -1;
-        } else if (this.location.y <= -cubeDims.y / 2 ) {
-            //gas up opens top
-            this.location.y = cubeDims.y / 2;
-            //closes lid
-            // this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
-            // this.velocity.y = this.velocity.y * -1;
-        }
-        if (this.location.z >= cubeDims.z / 2 ) {
-            this.location.z = cubeDims.z / 2 ;
-            this.velocity.z = this.velocity.z * -1;
-        } else if (this.location.z <= -cubeDims.z / 2 ) {
-            this.location.z = -cubeDims.z / 2 ;
-            this.velocity.z = this.velocity.z * -1;
-        }
-    }
+    //     if (this.location.x >= cubeDims.x / 2) {
+    //         this.location.x = -cubeDims.x / 2;
+    //     } else if (this.location.x <= -cubeDims.x / 2) {
+    //         this.location.x = cubeDims.x / 2;
+    //     }
+    //     if (this.location.y >= cubeDims.y / 2) {
+    //         //opens base
+    //         // this.location.y = -cubeDims.y / 2;
+    //         //closes base
+    //         this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
+    //         this.velocity.y = this.velocity.y * -1;
+    //     } else if (this.location.y <= -cubeDims.y / 2) {
+    //         //gas up opens top
+    //         // this.location.y = cubeDims.y / 2;
+    //         //closes lid
+    //         this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
+    //         this.velocity.y = this.velocity.y * -1;
+    //     }
+    //     if (this.location.z >= cubeDims.z / 2) {
+    //         this.location.z = cubeDims.z / 2;
+    //         this.velocity.z = this.velocity.z * -1;
+    //     } else if (this.location.z <= -cubeDims.z / 2) {
+    //         this.location.z = -cubeDims.z / 2;
+    //         this.velocity.z = this.velocity.z * -1;
+    //     }
+    // }
 }
 
 

@@ -5,17 +5,19 @@ let cubeDims, cubeLoc;
 let xoff = 0.0;
 let cursorVisibility = true;
 let saveCalled = false;
+let halfSizeOn = false;
 let goSim = false;
+let patternScaler = 1;
 // let flocking = false;
 // let naturalForces = false;
 // let attractorsOn = false;
 let img, imgLogo;
-let xCount = 70;
-let yCount = 20;
+let xCount = 90;
+let yCount = 50;
 let count = 0;
 let sinCount = 0;
 let alignSlider, separationSlider, cohesionSlider;
-let playCheck, flockingCheck, gravityCheck, windCheck, patternCheck, repelCheck, expandCheck, contractCheck;
+let playCheck, flockingCheck, gravityCheck, windCheck, patternCheck, halfWidthCheck, repelCheck, expandCheck, contractCheck;
 let radius = 200;
 //experimental listnames for logo coordinates
 let logoXList, logoYList;
@@ -46,25 +48,28 @@ function setup() {
   let xListSorted = logoXList.toSorted();
   logoX = xListSorted[logoXList.length - 1];
   //pres
-  cubeDims = createVector(1920 * 2, 1080 * 2, 1080 * 2.125);
+  cubeDims = createVector(1920 * 2, 1080 * 2, 1080 * 0.1);
 
   //event
   // cubeDims = createVector(1462, 428, 200);
   cubeLoc = createVector(0, 0, 0);
 
   // legacy set up for particles and attractors using let
-  // for (let i = 0; i < yCount; i++) {
-  //   for (let j = 0; j < xCount; j++) {
-  //     flock[(i * xCount) + j] = new Particle(map(j, 0, xCount, -cubeDims.x / 2 + (radius / 3), cubeDims.x / 2 - (radius / 40)), map(i, 0, yCount, -cubeDims.y / 2 + (radius / 3), cubeDims.y / 2 - (radius / 100)), cubeDims.z / 2, random(radius * 0.1, radius * 0.1), 100, 100);
-  //   }
-  // }
-  // experimental draw logo
-  for (let i = 0; i < logoXList.length; i++) {
-    let currPos = createVector(logoXList[i], logoYList[i], 0);
-    let swapPos = createVector(logoXList[logoXList.length - i - 1], logoYList[logoYList.length - i - 1], 0);
-    //logo variable
-    flock[i] = new Particle(currPos.x - width * 0.25, currPos.y - height * 0.25, currPos.z, random(30,30), swapPos.x - width * 0.25, swapPos.y - height * 0.25);
+  for (let i = 0; i < yCount; i++) {
+    for (let j = 0; j < xCount; j++) {
+      // flock[(i * xCount) + j] = new Particle(map(j, 0, xCount, -cubeDims.x / 2 + (radius / 3), cubeDims.x / 2 - (radius / 10)), map(i, 0, yCount, -cubeDims.y / 2 + (radius / 3), cubeDims.y / 2 - (radius / 100)), cubeDims.z / 2, random(radius * 0.1, radius * 0.1), 100, 100);
+      flock[(i * xCount) + j] = new Particle(random(cubeDims.x) - cubeDims.x / 2, random(cubeDims.y) - cubeDims.y / 2, random(cubeDims.z) - cubeDims.z / 2, random(radius * 0.2, radius * 0.2), 100, 100);
+
+    }
   }
+  // experimental draw logo
+  // for (let i = 0; i < logoXList.length; i++) {
+  //   let currPos = createVector(logoXList[i], logoYList[i], 0);
+  //   let swapPos = createVector(logoXList[logoXList.length - i - 1], logoYList[logoYList.length - i - 1], 0);
+  //   //logo variable
+  //   flock[i] = new Particle(currPos.x - width * 0.25, currPos.y - height * 0.25, currPos.z, random(30,30), swapPos.x - width * 0.25, swapPos.y - height * 0.25);
+
+  // }
 
   // }
   // for (let i = 0; i < 1; i++) {
@@ -99,6 +104,9 @@ function draw() {
     if (patternCheck.checked()) {
       particles.applyPattern(flock);
     }
+    if (halfWidthCheck.checked()) {
+      particles.applyHalfWidth(flock);
+    }
 
     if (repelCheck.checked()) {
       particles.applyRepel(flock);
@@ -106,9 +114,9 @@ function draw() {
 
     if (expandCheck.checked()) {
       particles.applyExpand(flock);
-    }else if (contractCheck.checked()){
+    } else if (contractCheck.checked()) {
       particles.applyContract(flock);
-    }else{
+    } else {
       particles.applyBacktoNormal(flock);
     }
 
@@ -117,13 +125,13 @@ function draw() {
     // }else {
     //   particles.applyBacktoNormal(flock);
     // }
-   
+
     particles.show();
     particles.checkCollision();
     // particles.applyAttraction();
   }
-  if (saveCalled && count < 1500) {
-    //frameRate(5);
+  if (saveCalled && count < 2400) {
+    frameRate(5);
     saveCanvas('test-output' + count, 'png');
     count++;
   }
@@ -159,6 +167,17 @@ function keyPressed() {
   if (keyCode == 83 && !saveCalled) {
     saveCalled = true;
   }
+  if (keyCode == 88 && !halfSizeOn) {
+    patternScaler = 0.5;
+    halfSizeOn = true;
+    print(patternScaler);
+  } else if (keyCode == 88 && halfSizeOn) {
+    patternScaler = 1;
+    halfSizeOn = false;
+    print(patternScaler);
+
+  }
+
 }
 
 
