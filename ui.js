@@ -123,7 +123,7 @@ function drawUI() {
   contractCheckText.style('color', '#ffffff');
   contractCheckText.position(36, 337);
 
-  let keyControlsText = createElement('desc', 'Key: <BR>c = Toggle Cursor <BR> b = Toggle Box Visibility <BR>l = Toggle Lights<BR>x = Half Size Positions<BR> s = SaveFrames (up to 2400)');
+  let keyControlsText = createElement('desc', 'Key Controls: <BR>c = Toggle Cursor <BR> b = Toggle Box Visibility <BR>l = Toggle Lights<BR>x = Half Size Positions<BR> s = SaveFrames (up to 2400)');
   keyControlsText.style('color', '#ffffff');
   keyControlsText.position(18,427);
 

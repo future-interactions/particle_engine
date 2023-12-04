@@ -38,7 +38,7 @@ function setup() {
   let xListSorted = logoXList.toSorted();
   logoX = xListSorted[logoXList.length - 1];
   //pres
-  cubeDims = createVector(1920 * 2, 1080 * 2, 1080 * 0.5);
+  cubeDims = createVector(1920 * 2, 1080 * 2, 1080);
   //event
   //cubeDims = createVector(1462, 428, 200);
   cubeLoc = createVector(0, 0, 0);
@@ -154,7 +154,7 @@ function keyPressed() {
 
   if (keyCode == 76 && lightsVisibility) {
     lightsVisibility = false;
-  } else if (keyCode == 76 && !boxVisibility) {
+  } else if (keyCode == 76 && !lightsVisibility) {
     lightsVisibility = true;
   }
 
