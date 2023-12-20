@@ -23,7 +23,7 @@ class Particle {
     align(particles) {
         let steering = createVector();
         // let perceptionRadius = aPerceptionRadius.value();
-        let perceptionRadius = sliders[1].value();
+        let perceptionRadius = sliders[7].value();
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -42,7 +42,7 @@ class Particle {
     }
     cohesion(particles) {
         let steering = createVector();
-        let perceptionRadius = cPerceptionRadius.value();
+        let perceptionRadius = sliders[9].value();
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -62,7 +62,7 @@ class Particle {
     }
     separation(particles) {
         let steering = createVector();
-        let perceptionRadius = cPerceptionRadius.value();
+        let perceptionRadius = sliders[11].value();
         let total = 0;
         for (let other of particles) {
             let d = dist(this.location.x, this.location.y, this.location.z, other.location.x, other.location.y, other.location.z);
@@ -87,20 +87,20 @@ class Particle {
         let ali = this.align(particles); // Alignment
         let coh = this.cohesion(particles); // Cohesion
         if (sep !== undefined) {
-            sep.mult(separationSlider.value());
+            sep.mult(sliders[10].value());
         }
         if (ali !== undefined) {
-            ali.mult(alignSlider.value());
+            ali.mult(sliders[6].value());
         }
         if (coh !== undefined) {
-           // print("coh="+cohesionSlider.id());
-            coh.mult(cohesionSlider.value());
+            // print("coh="+cohesionSlider.id());
+            coh.mult(sliders[8].value());
         }
         this.applyForce(sep);
         this.applyForce(ali);
         this.applyForce(coh);
     }
-    
+
     applyPattern(particles) {
         let xScale = p5.Vector.mult(this.startLoc, patternScaler);
         let steering = p5.Vector.sub(xScale, this.location);
@@ -130,7 +130,7 @@ class Particle {
             this.applyForce(steering);
         }
     }
-  
+
     applyExpand(particles) {
         this.r += 0.1;
     }
@@ -147,17 +147,17 @@ class Particle {
         }
     }
     applyWind(particles) {
-        let wind = createVector(0.02,0, 0);
+        let wind = createVector(0.02, 0, 0);
         let weight = p5.Vector.mult(wind, this.mass);
         this.applyForce(weight);
     }
 
     applyGas(particles) {
-        let ranSeed = random(0,1);
+        let ranSeed = random(0, 1);
         let sinOffset = map(sin(sinCount), -1, 1, -ranSeed, ranSeed);
         let gas = createVector(sinOffset, -0.1, 0);
         let weight = p5.Vector.mult(gas, this.mass);
-        sinCount +=0.04;
+        sinCount += 0.04;
         // return (weight);
         this.applyForce(weight);
     }
@@ -184,7 +184,9 @@ class Particle {
         noStroke();
         fill(this.color);
         translate(this.location.x, this.location.y, this.location.z);
-        sphere(this.r / 2);
+        // sphere(this.r / 2);
+        sphere(sliders[5].value());
+
         pop();
     }
 
@@ -213,31 +215,31 @@ class Particle {
         // }
 
         //tunnel
-            if (this.location.x >= cubeDims.x / 2) {
-                this.location.x = -cubeDims.x / 2;
-            } else if (this.location.x <= -cubeDims.x / 2) {
-                this.location.x = cubeDims.x / 2;
-            }
-            if (this.location.y >= cubeDims.y / 2) {
-                //opens base
-                this.location.y = -cubeDims.y / 2;
-                // //closes base
-                // this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
-                // this.velocity.y = this.velocity.y * -1;
-            } else if (this.location.y <= -cubeDims.y / 2) {
-                //gas up opens top
-                this.location.y = cubeDims.y / 2;
-                //closes lid
-                // this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
-                // this.velocity.y = this.velocity.y * -1;
-            }
-            if (this.location.z >= cubeDims.z / 2) {
-                this.location.z = cubeDims.z / 2;
-                this.velocity.z = this.velocity.z * -1;
-            } else if (this.location.z <= -cubeDims.z / 2) {
-                this.location.z = -cubeDims.z / 2;
-                this.velocity.z = this.velocity.z * -1;
-            }
+        if (this.location.x >= cubeDims.x / 2) {
+            this.location.x = -cubeDims.x / 2;
+        } else if (this.location.x <= -cubeDims.x / 2) {
+            this.location.x = cubeDims.x / 2;
+        }
+        if (this.location.y >= cubeDims.y / 2) {
+            //opens base
+            this.location.y = -cubeDims.y / 2;
+            // //closes base
+            // this.location.y = cubeDims.y / 2 - (this.dims.y / 4);
+            // this.velocity.y = this.velocity.y * -1;
+        } else if (this.location.y <= -cubeDims.y / 2) {
+            //gas up opens top
+            this.location.y = cubeDims.y / 2;
+            //closes lid
+            // this.location.y = -cubeDims.y / 2 + (this.dims.y / 4);
+            // this.velocity.y = this.velocity.y * -1;
+        }
+        if (this.location.z >= cubeDims.z / 2) {
+            this.location.z = cubeDims.z / 2;
+            this.velocity.z = this.velocity.z * -1;
+        } else if (this.location.z <= -cubeDims.z / 2) {
+            this.location.z = -cubeDims.z / 2;
+            this.velocity.z = this.velocity.z * -1;
         }
     }
+}
 

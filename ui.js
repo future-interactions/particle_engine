@@ -1,251 +1,278 @@
 function drawUI() {
-  let left = 400;
+  let left = 10;
   let leftPadding = 10;
   let top = 25;
   let sliderHeight = 20;
   let sliderSize = 135;
   let sliderLeading = 30;
-  let itemRow = 1;
-  let itemCol = 1;
   let textOffsetY = 22;
   let textOffsetX = 0;
+  let checkBoxHeight = 12;
+  let checkBoxCol = sliderSize;
+  let titleSpacer = 16;
+  let hrSpacer = 25;
 
-
-  
   let uiContainer = createElement('cont', 'The Office of Future Interactions');
+  top = top + hrSpacer * 0.35;
+
   let hr1 = createElement('hr', '<hr>');
-  hr1.position(leftPadding + left, top * 1.25 + 3);
-  top = top + 25;
+  hr1.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
+  //Version
+  let t0 = createElement('identifier', 'Version');
+  t0.position(leftPadding * 1.5 + left, top);
+  top = top + titleSpacer;
+  let t0_1 = createElement('desc', 'Vaisala_3.2.2');
+  t0_1.position(leftPadding * 1.5 + left, top);
+  top = top + hrSpacer;
+
+  let hr2 = createElement('hr', '<hr>');
+
+  hr2.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
+  //controls
   let t1 = createElement('identifier', 'Controls');
   t1.position(leftPadding * 1.5 + left, top);
-  top = top + 10;
-  playCheck = createCheckbox('', false);
-  playCheck.position(leftPadding + left, top);
+  top = top + titleSpacer;
+  newCheckBox(1, 'Play (p)', 1, 1);
+  newCheckBox(2, 'Export – disabled', 2, 1);
+  top = top + hrSpacer;
+  let hr3 = createElement('hr', '<hr>');
+  hr3.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
 
-  let playCheckText = createElement('desc', 'Play (p)');
-  playCheckText.position(left + sliderHeight + leftPadding + textOffsetX, top + 3);
-  top = top + 10;
-  let hr2 = createElement('hr', 'hi<hr>');
-  hr2.position(leftPadding + left, top * 1.25 + 3);
-
-  top = top + 35;
-
-
-  let t2 = createElement('identifier', 'Flocking');
+  //Mode
+  let t2 = createElement('identifier', 'Mode');
   t2.position(leftPadding * 1.5 + left, top);
+  top = top + titleSpacer;
+  newCheckBox(3, 'Grid', 1, 1);
+  // newCheckBox(4, 'Logo', 2, 1);
+  top = top + checkBoxHeight;
+  // newCheckBox(5, 'Random', 1, 2);
+  // top = top + hrSpacer + checkBoxHeight;
+  top = top + hrSpacer;
 
-  top = top + 10;
-  flockingCheck = createCheckbox('', false);
-  flockingCheck.position(leftPadding + left, top);
-  let flockingCheckText = createElement('desc', 'Flocking (f)');
-  flockingCheckText.position(left + sliderHeight + leftPadding + textOffsetX, top + 3);
-  top = top + 35;
-  updateCol(0);
-  updateRow(0);
-  alignSlider = createSlider(0.1, 1, 0.5, 0.1);
-  alignSlider.position(sXpos, sYpos);
-  alignSlider.size(sliderSize);
-  alignSlider.style('appearance', 'none'),
-    alignSlider.style('background: #ffffff');
+  let hr4 = createElement('hr', '<hr>');
+  hr4.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
 
-  let alignSliderText = createElement('desc', 'Alignment');
-  alignSliderText.position(sXpos + 2, sYpos + textOffsetY);
+  //Environment
+  let t3 = createElement('identifier', 'Environment');
+  t3.position(leftPadding * 1.5 + left, top);
+  top = top + titleSpacer;
+  newCheckBox(6, 'Show Container (c)', 1, 1);
+  newCheckBox(7, 'Lights (l)', 2, 1);
+  top = top + sliderLeading;
+  newSlider(1, 'Width', 160, 1920, 960, 1, 1, 1);
+  newSlider(2, 'Height', 90, 1080, 540, 1, 1, 2);
+  newSlider(3, 'Depth', 90, 1080, 540, 0.1, 1, 3);
+  top = top + (sliderHeight + sliderLeading) * 3;
+  let hr5 = createElement('hr', '<hr>');
+  hr5.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
 
-  updateCol(1);
+  //system
+  let t4 = createElement('identifier', 'System');
+  t4.position(leftPadding * 1.5 + left, top);
+  top = top + titleSpacer;
+  newSlider(4, 'Particle Count', 100, 30000, 1000, 1, 1, 1);
+  newSlider(5, 'Particle Size', 0.1, 10, 5, 1, 2, 1);
+  top = top + sliderLeading + sliderHeight;
+  resetButton = createButton('Reset (r)');
+  resetButton.style('font-size: 11px'),
+    resetButton.style('border-width: 1px'),
+    resetButton.style('font-family: monospace;'),
+    resetButton.style('appearance', 'none'),
+    resetButton.position(leftPadding * 1.25 + left, top);
+  top = top + hrSpacer;
 
-  newSlider(1, 'align', 0, 300, 100, 1, sXpos,sYpos);
+  //Behaviour
+  let hr6 = createElement('hr', 'hi<hr>');
+  hr6.position(leftPadding + left, top + 3);
+  top = top + titleSpacer;
+  let t5 = createElement('identifier', 'Behaviour');
+  t5.position(leftPadding * 1.5 + left, top);
+  top = top + titleSpacer;
+  newCheckBox(8, 'Flocking (f)', 1, 1);
 
-  // aPerceptionRadius = createSlider(0, 300, 100, 1);
-  // aPerceptionRadius.position(sXpos, sYpos);
-  // aPerceptionRadius.size(sliderSize);
-  // aPerceptionRadius.style('appearance', 'none'),
-  //   aPerceptionRadius.style('background: #ffffff');
+  // flockingCheck = createCheckbox('', false);
+  // flockingCheck.position(leftPadding + left, top);
+  // let flockingCheckText = createElement('desc', 'Flocking (f)');
+  // flockingCheckText.position(left + sliderHeight + leftPadding + textOffsetX, top + 3);
+  top = top + sliderLeading;
 
+  newSlider(6, 'Align', 0.1, 1, 0.5, 0.1, 1, 1);
+  newSlider(7, 'A Perception', 0, 300, 100, 1, 2, 1);
+  newSlider(8, 'Cohesion', 0.1, 1, 0.4, 0.1, 1, 2);
+  newSlider(9, 'C Perception', 0, 300, 200, 1, 2, 2);
+  newSlider(10, 'Separation', 0.1, 1, 0.5, 0.1, 1, 3);
+  newSlider(11, 'S Perception', 0, 300, 50, 1, 2, 3);
 
-  // aPerRadSliderText = createElement('desc', 'A Perception Rad = ' + aPerceptionRadius.value());
-  aPerRadSliderText = createElement('desc', 'A Perception Rad = ' + sliders[1].value());
+  top = top + (sliderHeight + sliderLeading) * 3;
+  newCheckBox(9, 'Gas', 1, 1);
+  top = top + sliderLeading;
+  newSlider(12, 'Gas Agitation', 0, 300, 50, 1, 1, 1);
 
-  aPerRadSliderText.position(sXpos + 2, sYpos + textOffsetY);
+  top = top + sliderHeight + sliderLeading;
+  newCheckBox(10, 'Wind', 1, 1);
+  top = top + sliderLeading;
+  newSlider(13, 'Wind Speed', 0, 300, 50, 1, 1, 1);
+  top = top + sliderHeight + sliderLeading;
+  newCheckBox(11, 'Gravity', 1, 1);
+  top = top + sliderLeading;
+  newSlider(14, 'Gravity Strength', 0, 300, 50, 1, 1, 1);
+  top = top + sliderHeight + sliderLeading;
+  newCheckBox(12, 'Repel', 1, 1);
+  top = top + checkBoxHeight;
+  top = top + checkBoxHeight;
 
-  updateCol(-1);
-  updateRow(1);
-
-  cohesionSlider = createSlider(0.1, 1, 0.5, 0.1);
-  cohesionSlider.position(sXpos, sYpos);
-  cohesionSlider.size(sliderSize);
-  cohesionSlider.style('appearance', 'none'),
-    cohesionSlider.style('background: #ffffff');
-
-
-  let cohesionSliderText = createElement('desc', 'Cohesion');
-  cohesionSliderText.position(sXpos + 2, sYpos + textOffsetY);
-  updateCol(1);
-
-
-  cPerceptionRadius = createSlider(0, 300, 200, 1);
-  cPerceptionRadius.position(sXpos, sYpos);
-  cPerceptionRadius.size(sliderSize);
-  cPerceptionRadius.style('appearance', 'none'),
-    cPerceptionRadius.style('background: #ffffff');
-
-
-  cPerRadSliderText = createElement('desc', 'C Perception Rad = ' + cPerceptionRadius.value());
-  cPerRadSliderText.position(sXpos + 2, sYpos + textOffsetY);
-  updateCol(-1);
-  updateRow(1);
-
-  separationSlider = createSlider(0.1, 1, 0.5, 0.1);
-  separationSlider.position(sXpos, sYpos);
-  separationSlider.size(sliderSize);
-  separationSlider.style('appearance', 'none'),
-    separationSlider.style('background: #ffffff');
-
-  let separationSliderText = createElement('desc', 'Separation');
-  separationSliderText.position(sXpos + 2, sYpos + textOffsetY);
-
-  updateCol(1);
-
-  sPerceptionRadius = createSlider(0, 300, 50, 1);
-  sPerceptionRadius.position(sXpos, sYpos);
-  sPerceptionRadius.size(sliderSize);
-  sPerceptionRadius.style('appearance', 'none'),
-    sPerceptionRadius.style('background: #ffffff');
-
-  sPerRadSliderText = createElement('desc', 'S Perception Rad = ' + sPerceptionRadius.value());
-  sPerRadSliderText.position(sXpos + 2, sYpos + textOffsetY);
-
-  top = top + 80;
-  let hr3 = createElement('hr', 'hi<hr>');
-  hr3.position(leftPadding + left, top * 1.25 + 3);
-
-
-  gasCheck = createCheckbox('', false);
-  gasCheck.position(14, 195);
-
-  gravityCheck = createCheckbox('', false);
-  gravityCheck.position(14, 215);
-
-  windCheck = createCheckbox('', false);
-  windCheck.position(14, 235);
-
-  patternCheck = createCheckbox('', false);
-  patternCheck.position(14, 255);
-
-  halfWidthCheck = createCheckbox('', false);
-  halfWidthCheck.position(14, 275);
-
-  repelCheck = createCheckbox('', false);
-  repelCheck.position(14, 295);
-
-  expandCheck = createCheckbox('', false);
-  expandCheck.position(14, 315);
-
-  contractCheck = createCheckbox('', false);
-  contractCheck.position(14, 335);
+  // newCheckBox(13, 'Repel (live)', 1, 1);
+  // top = top + hrSpacer;
 
 
+  // gasCheck = createCheckbox('', false);
+  // gasCheck.position(14, 195);
 
-  let gasCheckText = createElement('desc', 'Gas');
-  gasCheckText.position(36, 197);
+  // gravityCheck = createCheckbox('', false);
+  // gravityCheck.position(14, 215);
 
-  let gravityCheckText = createElement('desc', 'Gravity');
-  gravityCheckText.position(36, 217);
+  // windCheck = createCheckbox('', false);
+  // windCheck.position(14, 235);
+
+  // patternCheck = createCheckbox('', false);
+  // patternCheck.position(14, 255);
+
+  // halfWidthCheck = createCheckbox('', false);
+  // halfWidthCheck.position(14, 275);
+
+  // repelCheck = createCheckbox('', false);
+  // repelCheck.position(14, 295);
+
+  // expandCheck = createCheckbox('', false);
+  // expandCheck.position(14, 315);
+
+  // contractCheck = createCheckbox('', false);
+  // contractCheck.position(14, 335);
+
+  // ranPosCheck = createCheckbox('', false);
+  // ranPosCheck.position(14, 355);
+
+  // let gasCheckText = createElement('desc', 'Gas');
+  // gasCheckText.position(36, 197);
+
+  // let gravityCheckText = createElement('desc', 'Gravity');
+  // gravityCheckText.position(36, 217);
 
 
-  let windCheckText = createElement('desc', 'Wind');
-  windCheckText.position(36, 237);
+  // let windCheckText = createElement('desc', 'Wind');
+  // windCheckText.position(36, 237);
 
-  let patternCheckText = createElement('desc', 'Pattern');
-  patternCheckText.position(36, 257);
+  // let patternCheckText = createElement('desc', 'Pattern');
+  // patternCheckText.position(36, 257);
 
-  let halfWidthText = createElement('desc', 'Half Width');
-  halfWidthText.position(36, 277);
-
-
-  let repelCheckText = createElement('desc', 'Repel');
-  repelCheckText.position(36, 297);
+  // let halfWidthText = createElement('desc', 'Half Width');
+  // halfWidthText.position(36, 277);
 
 
-  let expandCheckText = createElement('desc', 'Expand');
-  expandCheckText.position(36, 317);
+  // let repelCheckText = createElement('desc', 'Repel');
+  // repelCheckText.position(36, 297);
 
-  let contractCheckText = createElement('desc', 'Contract');
-  contractCheckText.position(36, 337);
 
-  let keyControlsText = createElement('desc', 'Key Controls: <BR>c = Toggle Cursor <BR> b = Toggle Box Visibility <BR>l = Toggle Lights<BR>x = Half Size Positions<BR>r = Reset Flock<BR> s = SaveFrames (up to 2400)');
-  keyControlsText.position(18, 427);
+  // let expandCheckText = createElement('desc', 'Expand');
+  // expandCheckText.position(36, 317);
 
-  function updateCol(n) {
-    let val = n;
-    itemCol += val;
-    sXpos = leftPadding * itemCol + left + (sliderSize * (itemCol - 1));
-  }
+  // let contractCheckText = createElement('desc', 'Contract');
+  // contractCheckText.position(36, 337);
 
-  function updateRow(n) {
-    let val = n;
-    itemRow += val;
-    sYpos = (sliderHeight + sliderLeading) * (itemRow - 1) + top;
-  }
-  function newSlider(num, id,s, e, st, inc, x, y) {
-    sliders[num] = createSlider(s,e,st,inc);
+  // let keyControlsText = createElement('desc', 'Key Controls: <BR>c = Toggle Cursor <BR> b = Toggle Box Visibility <BR>l = Toggle Lights<BR>x = Half Size Positions<BR>r = Reset Flock<BR> s = SaveFrames (up to 2400)');
+  // keyControlsText.position(18, 427);
+
+  // function updateCol(n) {
+  //   let val = n;
+  //   itemCol += val;
+  //   sXpos = leftPadding * itemCol + left + (sliderSize * (itemCol - 1));
+  // }
+
+  // function updateRow(n) {
+  //   let val = n;
+  //   itemRow += val;
+  //   sYpos = (sliderHeight + sliderLeading) * (itemRow - 1) + top;
+  // }
+  function newSlider(num, id, s, e, st, inc, col, row) {
+    sliders[num] = createSlider(s, e, st, inc);
     sliders[num].id(id);
+    let x = leftPadding * col + left + (sliderSize * (col - 1));
+    let y = (sliderHeight + sliderLeading) * (row - 1) + top;
     sliders[num].position(x, y);
     sliders[num].size(sliderSize);
     sliders[num].style('appearance', 'none'),
-    sliders[num].style('background: #cc9999');
-  
-    // let playCheckText = createElement('desc', 'Play (p)');
-    // playCheckText.position(left + sliderHeight + leftPadding + textOffsetX, top + 3);
+      sliders[num].style('background: #eeeeee');
+    sliders[num].style('border-style: solid');
+    sliders[num].style('border-width: 1px');
+
+    sliderText[num] = createElement('desc', id + " = " + sliders[num].value());
+    sliderText[num].position(x + 2, y + textOffsetY);
+  }
+  function newCheckBox(num, id, col, row) {
+    checkBox[num] = createCheckbox('', false);
+    let x = leftPadding * col + left + ((col - 1) * checkBoxCol);
+    let y = top + (row - 1) * checkBoxHeight;
+    checkBox[num].position(x, y);
+    checkBoxText[num] = createElement('desc', id);
+    checkBoxText[num].position(x + sliderHeight, y + 4);
   }
 }
 function updateSlidersText() {
-  // aPerRadSliderText.html('A Perception Rad = ' + aPerceptionRadius.value());
-    aPerRadSliderText.html('A Perception Rad = ' + sliders[1].value());
-
-
-  cPerRadSliderText.html('C Perception Rad = ' + cPerceptionRadius.value());
-  sPerRadSliderText.html('S Perception Rad = ' + sPerceptionRadius.value());
-
+  for (let i = 1; i < sliders.length; i++) {
+    sliderText[i].html(sliders[i].id() + " = " + sliders[i].value());
+  }
 }
 
 function keyPressed() {
-  if (keyCode == 67 && cursorVisibility) {
-    noCursor();
-    cursorVisibility = false;
-  } else if (keyCode == 67 && !cursorVisibility) {
-    cursor();
-    cursorVisibility = true;
-  }
+  // if (keyCode == 67 && cursorVisibility) {
+  //   noCursor();
+  //   cursorVisibility = false;
+  // } else if (keyCode == 67 && !cursorVisibility) {
+  //   cursor();
+  //   cursorVisibility = true;
+  // }
 
-  if (keyCode == 66 && boxVisibility) {
+  if (keyCode == 67 && boxVisibility) {
     boxVisibility = false;
-  } else if (keyCode == 66 && !boxVisibility) {
+    checkBox[6].checked(false);
+  } else if (keyCode == 67 && !boxVisibility) {
     boxVisibility = true;
+    checkBox[6].checked(true);
+
   }
 
   if (keyCode == 80 && playing) {
     playing = false;
-    playCheck.checked(false);
+    checkBox[1].checked(false);
   } else if (keyCode == 80 && !playing) {
     playing = true;
-    playCheck.checked(true);
+    checkBox[1].checked(true);
   }
 
   if (keyCode == 70 && flocking) {
     flocking = false;
-    flockingCheck.checked(false);
+    checkBox[8].checked(false);
   } else if (keyCode == 70 && !flocking) {
     flocking = true;
-    flockingCheck.checked(true);
+    checkBox[8].checked(true);
   }
 
   if (keyCode == 76 && lightsVisibility) {
     lightsVisibility = false;
+    checkBox[7].checked(false);
+
   } else if (keyCode == 76 && !lightsVisibility) {
     lightsVisibility = true;
+    checkBox[7].checked(true);
+
   }
 
-  if (keyCode == 83 && !saveCalled) {
+  if (keyCode == 69 && !saveCalled) {
     saveCalled = true;
   }
 
