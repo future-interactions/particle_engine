@@ -75,7 +75,7 @@ function drawUI() {
   let t4 = createElement('identifier', 'System');
   t4.position(leftPadding * 1.5 + left, top);
   top = top + titleSpacer;
-  newSlider(4, 'Particle Count', 100, 30000, 1000, 1, 1, 1);
+  newSlider(4,  'Count (disabled)', 1, 3, 1, 1, 1, 1);
   newSlider(5, 'Particle Size', 0.1, 10, 5, 1, 2, 1);
   top = top + sliderLeading + sliderHeight;
   resetButton = createButton('Reset (r)');
