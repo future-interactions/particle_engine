@@ -42,7 +42,7 @@ function setup() {
   createCanvas(1920, 1080, WEBGL);
   //event
   //pres
-  cubeDims = createVector(width * 0.75, height * 0.75, width * 0.25);
+  cubeDims = createVector(960, 540, 540);
   //event
   //cubeDims = createVector(1462, 428, 200);
   // createCanvas(1462, 428, WEBGL);
