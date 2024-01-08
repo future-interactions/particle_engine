@@ -154,7 +154,7 @@ function createFlock() {
     for (let i = 0; i < yCount; i++) {
       for (let j = 0; j < xCount; j++) {
         //grid positions
-        flock[(i * xCount) + j] = new Particle(map(j, 0, xCount, -cubeDims.x / 2 + (radius / 3), cubeDims.x / 2 - (radius / 10)), map(i, 0, yCount, -cubeDims.y / 2 + (radius / 3), cubeDims.y / 2 - (radius / 100)), -cubeDims.z * 0.05, random(radius * 0.1, radius * 2), random(cubeDims.x) - cubeDims.x / 2, random(cubeDims.y) - cubeDims.y / 2);
+        flock[(i * xCount) + j] = new Particle(map(j, 0, xCount, -cubeDims.x / 2 + (radius / 3), cubeDims.x / 2 - (radius / 10)), map(i, 0, yCount, -cubeDims.y / 2 + (radius / 3), cubeDims.y / 2 - (radius / 100)), 0, random(radius * 0.1, radius * 2), random(cubeDims.x) - cubeDims.x / 2, random(cubeDims.y) - cubeDims.y / 2);
         // flock[(i * xCount) + j] = new Particle(map(j, 0, xCount, -cubeDims.x / 2 + (radius / 3), cubeDims.x / 2 - (radius / 10)), map(i, 0, yCount, -cubeDims.y / 2 + (radius / 3), cubeDims.y / 2 - (radius / 100)), cubeDims.z / 2, random(radius * 0.1, radius * 0.1), 100, 100);
         // //random positionss
         // flock[(i * xCount) + j] = new Particle(random(cubeDims.x) - cubeDims.x / 2, random(cubeDims.y) - cubeDims.y / 2, random(cubeDims.z) - cubeDims.z / 2, random(radius*0.1, radius * 2), random(cubeDims.x) - cubeDims.x / 2, random(cubeDims.y) - cubeDims.y / 2);
